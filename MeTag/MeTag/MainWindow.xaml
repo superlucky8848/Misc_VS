@@ -1,0 +1,45 @@
+﻿<Window x:Class="MeTag.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="MeTag" Height="400" Width="600" 
+    AllowsTransparency="True" WindowStyle="None" 
+    Background="Transparent" ResizeMode="CanResizeWithGrip" Loaded="Window_Loaded">
+    <Border Margin="10">
+        <Border.Effect>
+            <DropShadowEffect Color="Black" Direction="315" BlurRadius="10" ShadowDepth="3" />
+        </Border.Effect>
+        <Grid Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="4" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="4" />
+            </Grid.ColumnDefinitions>
+            <DockPanel Grid.ColumnSpan="3" Grid.RowSpan="3">
+                <DockPanel Height="30" DockPanel.Dock="Top" Name="titleBar" Background="#BADA55" VerticalAlignment="Top">
+                    <TextBlock Name="tbTitle" Padding="8" Text="MeTag" FontSize="13" FontWeight="Bold"></TextBlock>
+                    <Button Name="btExit" Width="30" Click="btExit_Click" DockPanel.Dock="Right" HorizontalAlignment="Right">
+                        ×
+                    </Button>
+                </DockPanel>
+                <ContentControl Name="WindowContent">
+                    <ToolBarPanel Margin="0,107,12,0" Name="tBPTools" Height="60" VerticalAlignment="Top" ClipToBounds="False" HorizontalAlignment="Right" Width="252" Background="Crimson" />
+                </ContentControl>
+            </DockPanel>
+            <!--
+            <Rectangle Name="topleft" Fill="#BADA55" />
+            <Rectangle Name="top" Fill="#BADA55" Grid.Column="1" />
+            <Rectangle Name="topright" Fill="#BADA55" Grid.Column="2" />
+            -->
+            <Rectangle Name="right" Fill="#BADA55" Grid.Row="1" Grid.Column="2" />
+            <Rectangle Name="bottomright" Fill="#BADA55" Grid.Row="2" Grid.Column="2" />
+            <Rectangle Name="bottom" Fill="#BADA55" Grid.Row="2" Grid.Column="1" />
+            <Rectangle Name="bottomleft" Fill="#BADA55" Grid.Row="2" />
+            <Rectangle Name="left" Fill="#BADA55" Grid.Row="1" />
+        </Grid>
+    </Border>
+</Window>
