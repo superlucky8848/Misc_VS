@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeTag", "MeTag\MeTag.csproj", "{D6CEB181-C20F-441A-B307-10DFFC990F57}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeTagWinForm", "MeTagWinForm\MeTagWinForm.csproj", "{F29DF7A9-71A3-46FB-A1E1-DC5B976F9D97}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{D6CEB181-C20F-441A-B307-10DFFC990F57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6CEB181-C20F-441A-B307-10DFFC990F57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6CEB181-C20F-441A-B307-10DFFC990F57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F29DF7A9-71A3-46FB-A1E1-DC5B976F9D97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F29DF7A9-71A3-46FB-A1E1-DC5B976F9D97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F29DF7A9-71A3-46FB-A1E1-DC5B976F9D97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F29DF7A9-71A3-46FB-A1E1-DC5B976F9D97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
