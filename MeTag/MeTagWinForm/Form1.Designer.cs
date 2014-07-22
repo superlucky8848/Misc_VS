@@ -54,6 +54,7 @@
             this.lbTime = new System.Windows.Forms.Label();
             this.lbMessage = new System.Windows.Forms.Label();
             this.rTBDoc = new System.Windows.Forms.RichTextBox();
+            this.tSBHistoryList = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -62,8 +63,9 @@
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tSbtOpen,
+            this.tSbtSave,
             this.toolStripSeparator1,
-            this.tSbtSave});
+            this.tSBHistoryList});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(574, 25);
@@ -391,6 +393,16 @@
             this.rTBDoc.MouseEnter += new System.EventHandler(this.rTBDoc_MouseEnter);
             this.rTBDoc.KeyUp += new System.Windows.Forms.KeyEventHandler(this.rTBDoc_KeyUp);
             // 
+            // tSBHistoryList
+            // 
+            this.tSBHistoryList.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tSBHistoryList.Image = ((System.Drawing.Image)(resources.GetObject("tSBHistoryList.Image")));
+            this.tSBHistoryList.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tSBHistoryList.Name = "tSBHistoryList";
+            this.tSBHistoryList.Size = new System.Drawing.Size(88, 22);
+            this.tSBHistoryList.Text = "Show History";
+            this.tSBHistoryList.Click += new System.EventHandler(this.tSBHistoryList_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -437,6 +449,7 @@
         private System.Windows.Forms.Label lbTime;
         private System.Windows.Forms.Label lbMessage;
         private System.Windows.Forms.RichTextBox rTBDoc;
+        private System.Windows.Forms.ToolStripButton tSBHistoryList;
     }
 }
 

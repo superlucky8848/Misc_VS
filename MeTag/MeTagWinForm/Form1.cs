@@ -187,7 +187,7 @@ namespace MeTagWinForm
             using (OpenFileDialog ofDlg = new OpenFileDialog())
             {
                 ofDlg.DefaultExt = ".xml";
-                ofDlg.Filter = "XML File|*.xml|All File|*.*";
+                ofDlg.Filter = "XML File|*.xml|Work State File|*.ws|All File|*.*";
                 ofDlg.Multiselect = false;
 
                 if (ofDlg.ShowDialog() == DialogResult.OK)
@@ -199,6 +199,7 @@ namespace MeTagWinForm
                         rTBDoc.Clear();
                         rTBDoc.Text = curDoc.content;
                         lbMessage.Text = String.Format("Message:\n Tilte:{0}\n Author:{1}\n URL:{2}\n ID:{3}", curDoc.title, curDoc.author, curDoc.url, curDoc.id);
+                        RefreshRichTextBox(-1, -1);
                     }
                 }
             }
@@ -494,6 +495,16 @@ namespace MeTagWinForm
             ComboBox cbSender = (ComboBox)sender;
             curTag.attributes.Clear();
             curTag.attributes.Add(new KeyValuePair<string, string>("value", cbSender.Text));
+        }
+
+        private void tSBHistoryList_Click(object sender, EventArgs e)
+        {
+            if (curDoc == null) return;
+            using (HistoryForm historyForm = new HistoryForm())
+            {
+                historyForm.RefreshHistoryList(curDoc.historyList);
+                historyForm.ShowDialog();
+            }
         }
     }
 }

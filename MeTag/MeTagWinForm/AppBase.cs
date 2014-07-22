@@ -15,26 +15,45 @@ namespace MeTagWinForm
         public static TagDoc LoadFile(string fileName)
         {
             if (!File.Exists(fileName)) return null;
+            TagDoc ret = null;
+            string ext = Path.GetExtension(fileName).ToLower();
+            switch(ext)
+            {
+                case ".xml":
+                    ret = new TagDoc();
+                    XmlDocument xmlDoc = new XmlDocument();
+                    xmlDoc.Load(fileName);
 
-            TagDoc ret = new TagDoc();
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(fileName);
+                    XmlNode findNode = null;
 
-            XmlNode findNode = null;
+                    findNode = xmlDoc.DocumentElement.SelectSingleNode(@"/document[@id]");
+                    if (findNode != null) ret.id = findNode.Attributes["id"].Value;
+                    else return null;
+                    findNode = xmlDoc.DocumentElement.SelectSingleNode(@"/document/doc");
+                    if (findNode != null) ret.content = findNode.InnerText;
+                    else return null;
 
-            findNode = xmlDoc.DocumentElement.SelectSingleNode(@"/document[@id]");
-            if (findNode != null) ret.id = findNode.Attributes["id"].Value;
-            else return null;
-            findNode = xmlDoc.DocumentElement.SelectSingleNode(@"/document/doc");
-            if (findNode != null) ret.content = findNode.InnerText;
-            else return null;
-
-            findNode = xmlDoc.DocumentElement.SelectSingleNode(@"/document/title");
-            if (findNode != null) ret.title = findNode.InnerText;
-            findNode = xmlDoc.DocumentElement.SelectSingleNode(@"/document/author");
-            if (findNode != null) ret.author = findNode.InnerText;
-            findNode = xmlDoc.DocumentElement.SelectSingleNode(@"/document/meta[@url]");
-            if (findNode != null) ret.url = findNode.Attributes["url"].Value;
+                    findNode = xmlDoc.DocumentElement.SelectSingleNode(@"/document/title");
+                    if (findNode != null) ret.title = findNode.InnerText;
+                    findNode = xmlDoc.DocumentElement.SelectSingleNode(@"/document/author");
+                    if (findNode != null) ret.author = findNode.InnerText;
+                    findNode = xmlDoc.DocumentElement.SelectSingleNode(@"/document/meta[@url]");
+                    if (findNode != null) ret.url = findNode.Attributes["url"].Value;
+                    break;
+                case ".ws":
+                    BinaryFormatter binFormatter = new BinaryFormatter();
+                    ret = (TagDoc)binFormatter.Deserialize(File.OpenRead(fileName));
+                    break;
+            }
+            if (ret != null)
+            {
+                if (ret.historyList == null) ret.historyList = new List<HistoryNode>();
+                HistoryNode newHistoryNode = new HistoryNode();
+                newHistoryNode.loadDateTime = DateTime.Now;
+                newHistoryNode.saveDateTime = DateTime.Now;
+                newHistoryNode.computerName = System.Environment.MachineName;
+                ret.historyList.Add(newHistoryNode);
+            }
 
             return ret;
         }
@@ -47,6 +66,9 @@ namespace MeTagWinForm
                 || string.IsNullOrEmpty(savedDoc.content)) return false;
             string objFileName = fileName + ".ws";
 
+            HistoryNode curHistoryNode = savedDoc.historyList[savedDoc.historyList.Count - 1];
+            curHistoryNode.saveDateTime = DateTime.Now;
+
             using (FileStream fs = File.Create(objFileName))
             {
                 BinaryFormatter binFormatter = new BinaryFormatter();
@@ -54,7 +76,6 @@ namespace MeTagWinForm
                 fs.Flush();
             }
             
-
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml("<?xml version=\"1.0\" encoding=\"UTF-8\"?><doc id=\"\"><type></type><intent></intent><content xml:space=\"preserve\"></content></doc>");
 
@@ -193,6 +214,14 @@ namespace MeTagWinForm
     }
 
     [Serializable]
+    public class HistoryNode
+    {
+        public DateTime loadDateTime;
+        public DateTime saveDateTime;
+        public String computerName;
+    }
+
+    [Serializable]
     public class TagDoc
     {
         public string id;
@@ -205,6 +234,7 @@ namespace MeTagWinForm
         public string content;
 
         public List<TagNode> tagNodeList = new List<TagNode>();
+        public List<HistoryNode> historyList = new List<HistoryNode>();
 
         public int GetInsertPos(int posStart, int posEnd)
         {
