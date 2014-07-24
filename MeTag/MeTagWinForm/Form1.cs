@@ -475,7 +475,8 @@ namespace MeTagWinForm
                     rTBDoc.Focus();
                     break;
             }
-            
+            TagNode newTag = curDoc.getTagNodeByPos(posStart, posEnd);
+            SetCurTag(newTag);
         }
 
         private void rTBDoc_SelectionChanged(object sender, EventArgs e)

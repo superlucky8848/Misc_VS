@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security;
+using System.Text;
+using System.Xml;
 
 namespace MeTagWinForm
 {
@@ -19,7 +18,15 @@ namespace MeTagWinForm
             string ext = Path.GetExtension(fileName).ToLower();
             switch(ext)
             {
-                case ".xml":
+                case ".ws":
+                    using (FileStream fs = File.OpenRead(fileName))
+                    {
+                        BinaryFormatter binFormatter = new BinaryFormatter();
+                        ret = (TagDoc)binFormatter.Deserialize(fs);
+                        fs.Close();
+                    }
+                    break;
+                case ".xml": default:
                     ret = new TagDoc();
                     XmlDocument xmlDoc = new XmlDocument();
                     xmlDoc.Load(fileName);
@@ -39,10 +46,6 @@ namespace MeTagWinForm
                     if (findNode != null) ret.author = findNode.InnerText;
                     findNode = xmlDoc.DocumentElement.SelectSingleNode(@"/document/meta[@url]");
                     if (findNode != null) ret.url = findNode.Attributes["url"].Value;
-                    break;
-                case ".ws":
-                    BinaryFormatter binFormatter = new BinaryFormatter();
-                    ret = (TagDoc)binFormatter.Deserialize(File.OpenRead(fileName));
                     break;
             }
             if (ret != null)
