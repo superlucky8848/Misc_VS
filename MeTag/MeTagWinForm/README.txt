@@ -117,3 +117,10 @@ Tag会在文档中以响应的颜色标出。
 ----------------------------------------
 点击工具栏Show History按钮可以查看文档的编辑记录，如果打开的不是工作文件"*.ws"则只会有当前记录。打开工作文件可以查看工作文件记录。
 每次保存文件会添加一条历史记录，历史记录包括打开，保存文件的时间和计算机名。
+
+关于参数启动
+---------------------------------------
+[Path of MeTagWinForm]/MeTagWinForm.exe [Initail ws file] [Inital tag index]
+Example
+C:\Program Files\MeTag\MeTagWinForm.exe C:\MeTagTest\Output\0093.xml.ws 3
+将会启动MeTagWinForm并打开"C:\MeTagTest\Output\0093.xml.ws"文件同时选中第3个Tag。

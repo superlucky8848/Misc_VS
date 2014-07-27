@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.IO;
 
 namespace MeTagWinForm
 {
@@ -15,6 +16,7 @@ namespace MeTagWinForm
         #region Custom Variables
         private TagDoc curDoc = null;
         private TagNode curTag = null;
+        private string curDocFileName = null;
         #endregion
 
         #region Custom Functions
@@ -166,6 +168,34 @@ namespace MeTagWinForm
             rTBDoc.Select(oldSelectionStart, oldSelectionLength);
             rTBDoc.ResumeLayout();
         }
+
+        private void OpenFileCmd(string fileName)
+        {
+            if (String.IsNullOrEmpty(fileName) || !File.Exists(fileName)) return;
+
+            curDoc = AppBase.LoadFile(fileName);
+            if (curDoc == null) MessageBox.Show("Failed to load seleted file, check file format.");
+            else
+            {
+                rTBDoc.Clear();
+                rTBDoc.Text = curDoc.content;
+                if (!String.IsNullOrEmpty(curDoc.intent)) cbIntent.Text = curDoc.intent;
+                if (!String.IsNullOrEmpty(curDoc.type)) cBType.Text = curDoc.type;
+                lbMessage.Text = String.Format("Message:\n Tilte:{0}\n Author:{1}\n URL:{2}\n ID:{3}", curDoc.title, curDoc.author, curDoc.url, curDoc.id);
+                RefreshRichTextBox(-1, -1);
+                curDocFileName = Path.GetFileNameWithoutExtension(fileName);
+                if (curDocFileName.EndsWith(".xml")) curDocFileName = curDocFileName.Substring(0, curDocFileName.Length - 4);
+            }
+        }
+
+        private void SelectTagCmd(int index)
+        {
+            if (curDoc == null) return;
+            if (index < 0 || index >= curDoc.tagNodeList.Count) return;
+
+            rTBDoc.Select(curDoc.tagNodeList[index].startPos, curDoc.tagNodeList[index].endPos - curDoc.tagNodeList[index].startPos);
+            rTBDoc.ScrollToCaret();
+        }
         #endregion
         public Form1()
         {
@@ -180,6 +210,11 @@ namespace MeTagWinForm
             cBPurpose.SelectedIndex =
             cBDestination.SelectedIndex =
             cBTime.SelectedIndex = 0;
+
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length > 1) OpenFileCmd(args[1]);
+            int index=-1;
+            if (args.Length > 2 && Int32.TryParse(args[2], out index)) SelectTagCmd(index); 
         }
 
         private void tSbtOpen_Click(object sender, EventArgs e)
@@ -198,8 +233,12 @@ namespace MeTagWinForm
                     {
                         rTBDoc.Clear();
                         rTBDoc.Text = curDoc.content;
+                        if (!String.IsNullOrEmpty(curDoc.intent)) cbIntent.Text = curDoc.intent;
+                        if(!String.IsNullOrEmpty(curDoc.type)) cBType.Text = curDoc.type;
                         lbMessage.Text = String.Format("Message:\n Tilte:{0}\n Author:{1}\n URL:{2}\n ID:{3}", curDoc.title, curDoc.author, curDoc.url, curDoc.id);
                         RefreshRichTextBox(-1, -1);
+                        curDocFileName = Path.GetFileNameWithoutExtension(ofDlg.FileName);
+                        if (curDocFileName.EndsWith(".xml")) curDocFileName = curDocFileName.Substring(0, curDocFileName.Length - 4);
                     }
                 }
             }
@@ -212,7 +251,7 @@ namespace MeTagWinForm
 
             using (SaveFileDialog sfDlg = new SaveFileDialog())
             {
-                sfDlg.FileName = curDoc.id+"_result";
+                sfDlg.FileName = curDocFileName + "_result";
                 sfDlg.DefaultExt = "*.xml";
                 sfDlg.Filter = "XML File|*.xml|All File|*.*";
 
@@ -260,7 +299,7 @@ namespace MeTagWinForm
 
         private void rTBDoc_KeyUp(object sender, KeyEventArgs e)
         {
-            //TODO: Check And Add Tag
+            if (curDoc == null) return;
 #if DEBUG
             Console.WriteLine("rTBDoc KeyUp() => " + e.KeyCode.ToString());
 #endif
